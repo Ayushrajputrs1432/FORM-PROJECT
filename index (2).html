@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Report Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 350px;
+        }
+        .form-container h2 {
+            text-align: center;
+        }
+        .form-container input,
+        .form-container select,
+        .form-container textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+        .conditional-section {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="form-container">
+        <h2>Incident Report Form</h2>
+        <form action="/submit-form" method="POST" enctype="multipart/form-data">
+            <!-- Question: Are you a police officer? -->
+            <label for="is_police">Are you a police officer?</label>
+            <select id="is_police" name="is_police" required onchange="toggleFormSections()">
+                <option value="" disabled selected>Select Yes/No</option>
+                <option value="yes">YES</option>
+                <option value="no">NO</option>
+            </select>
+
+            <!-- Conditional form for police officers (Form 2) -->
+            <div id="police-form" class="conditional-section">
+                <h3>Form 2: Police Officer Details</h3>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="post">Select Post:</label>
+                <select id="post" name="post" required>
+                    <option value="" disabled selected>Select Post</option>
+                    <option value="constable">Constable</option>
+                    <option value="inspector">Inspector</option>
+                    <option value="sub-inspector">Sub Inspector</option>
+                </select>
+
+                <label for="pno">PNO No:</label>
+                <input type="text" id="pno" name="pno" required>
+
+                <label for="mobile">Mobile No:</label>
+                <input type="text" id="mobile" name="mobile" required>
+
+                <label for="thana">Thana:</label>
+                <input type="text" id="thana" name="thana" required>
+
+                <label for="chowki">Chowki:</label>
+                <input type="text" id="chowki" name="chowki" required>
+
+                <label for="incident_place">Incident Place:</label>
+                <input type="text" id="incident_place" name="incident_place" required>
+
+                <label for="incident_datetime">Incident Date & Time:</label>
+                <input type="datetime-local" id="incident_datetime" name="incident_datetime" required>
+
+                <label for="incident_description">Incident Description:</label>
+                <textarea id="incident_description" name="incident_description" rows="4" required></textarea>
+
+                <label for="is_case_with_women">Is case with women?</label>
+                <select id="is_case_with_women" name="is_case_with_women" required>
+                    <option value="yes">YES</option>
+                    <option value="no">NO</option>
+                </select>
+
+                <button type="submit">Submit Report</button>
+            </div>
+
+            <!-- Conditional form for non-police (Form 1) -->
+            <div id="non-police-form" class="conditional-section">
+                <h3>Form 1: Incident Report </h3>
+                <label for="username">Full Name:</label>
+                <input type="text" id="username" name="username" required>
+
+                <label for="mobile_no">Mobile No:</label>
+                <input type="text" id="mobile_no" name="mobile_no" required>
+
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address" required>
+
+                <label for="incident_place_no">Incident Place:</label>
+                <input type="text" id="incident_place_no" name="incident_place_no" required>
+
+                <label for="incident_datetime_no">Incident Date & Time:</label>
+                <input type="datetime-local" id="incident_datetime_no" name="incident_datetime_no" required>
+
+                <label for="incident_description_no">Incident Description:</label>
+                <textarea id="incident_description_no" name="incident_description_no" rows="4" required></textarea>
+
+                <label for="is_case_with_women_no">Is case with women?</label>
+                <select id="is_case_with_women_no" name="is_case_with_women_no" required>
+                    <option value="yes">YES</option>
+                    <option value="no">NO</option>
+                </select>
+
+                <label for="id_select">Select ID:</label>
+                <select id="id_select" name="id_select" required>
+                    <option value="aadhaar">Aadhaar</option>
+                </select>
+
+                <label for="aadhaar_no">ID No:</label>
+                <input type="text" id="aadhaar_no" name="aadhaar_no" required>
+
+                <label for="aadhaar_file">Attach ID (JPEG / PDF, less than 10MB):</label>
+                <input type="file" id="aadhaar_file" name="aadhaar_file" accept=".jpeg,.pdf,.jpg" required>
+
+                <p><strong>Note:</strong> Recording show is paid for 30 minutes. Please pay.</p>
+
+                <button type="submit">Submit </button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function toggleFormSections() {
+            var policeSelect = document.getElementById('is_police');
+            var policeForm = document.getElementById('police-form');
+            var nonPoliceForm = document.getElementById('non-police-form');
+            
+            if (policeSelect.value === 'yes') {
+                policeForm.style.display = 'block';
+                nonPoliceForm.style.display = 'none';
+            } else if (policeSelect.value === 'no') {
+                nonPoliceForm.style.display = 'block';
+                policeForm.style.display = 'none';
+            } else {
+                policeForm.style.display = 'none';
+                nonPoliceForm.style.display = 'none';
+            }
+        }
+    </script>
+
+</body>
+</html>
