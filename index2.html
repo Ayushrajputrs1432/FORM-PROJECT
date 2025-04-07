@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Incident Report Form</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to bottom, #f39d3a, #fdbbf4);
+            display: flex;
+            justify-content: center;   
+            align-items: center;
+            margin: 0;
+            height: 100vh;
+            width: 100vw;
+            color: hsl(0, 0%, 100%);
+            box-sizing: border-box;
+            overflow: 0;
+        }
+.form-container {
+            text-align: left;
+            background-color: rgba(250, 250, 250, 0.993);
+            padding: 26px;
+            border-radius: 22px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 86%; 
+            max-width: 350px;
+            margin-top: 22px;
+            color: black;
+            
+            border-image: linear-gradient(45deg, #dfd8e7af, #ffffff) 1; 
+            transform: scale(0); /* Initially scaled down for zoom-in effect */
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0; /* Hidden initially */
+}
+        #non-police-form {margin-top: 130px; /* Adjust only Form 1 */}
+        #police-form {margin-top: 0px; /* Keep Form 2 heading unchanged */}
+        .container { /*hello ascl boc*/
+            text-align: center;
+            transition: transform 0.5s ease, margin-top 0.5s ease;
+            margin-top: 100px;
+        }
+       
+        .form-container h2 {/*inc rep box */
+            text-align: center;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .form-container input,
+        .form-container select, /*box where input typed */
+        .form-container textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 12px 0;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            background-color: #ffffff;
+            font-size: 16px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(45deg, #76ff76, #e0f77d);
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 12px;
+            transition: background-color 0.3s ease;
+         
+        }
+/* Specific style for checkbox and its container */
+.declaration-container {
+    display: flex;
+    align-items: center; /* Align the checkbox and text vertically */
+    justify-content: flex-start; /* Prevent uneven spacing */
+    margin-top: 12px;
+    margin-bottom: 12px;
+}
+
+.declaration-container input[type="checkbox"] {
+    width: auto; /* Let the checkbox size itself naturally */
+    margin-right: 10px; /* Space between checkbox and text */
+}
+        .form-container button:hover {
+            background-color: #45a049;
+        }
+
+        .form-container button:active {
+            background-color: #3e8e41;
+        }
+
+        .conditional-section {
+            display: none;
+        }
+        .btn-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn-container button {/* register button*/
+            padding: 12px 24px;
+            font-size: 18px;
+            border-radius: 8px;
+            background-color: #e25c3a;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-container button:hover {
+            background-color: #ebb059;
+        }
+        /* Zoom-in effect for form container */
+        .form-container.active {
+            transform: scale(1); /* Full size */
+            opacity: 1; /* Fully visible */
+        }
+
+        /* Shift the "Hello Agra Smart City" box upwards */
+        .container.shifted {
+            margin-top: 0px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Greeting and Buttons -->
+        <h1>Hello Agra Smart City</h1>
+        <div class="btn-container">
+            <button onclick="showForm()">Register</button> <!-- Register Button -->
+            <button onclick="loginFunction()">Login</button> <!-- Login Button -->
+        </div>
+
+        <!-- Incident Report Form (Initially Hidden) -->
+        <div class="form-container" id="form-container">
+            <h2>Incident Report Form</h2>
+            <form action="/submit-form" method="POST" enctype="multipart/form-data">
+                <label for="is_police">Are you a police officer?</label>
+                <select id="is_police" name="is_police" required onchange="toggleFormSections()">
+                    <option value="" disabled selected>Select Yes/No</option>
+                    <option value="yes">YES</option>
+                    <option value="no">NO</option>
+                </select>
+
+                <!-- Conditional form for police officers (Form 2) -->
+                <div id="police-form" class="conditional-section">
+                    <h3> Form 2: Police Officer Details</h3>
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
+
+                    <label for="post">Select Post:</label>
+                    <select id="post" name="post" required>
+                        <option value="" disabled selected>Select Post</option>
+                        <option value="constable">Constable</option>
+                        <option value="inspector">Inspector</option>
+                        <option value="sub-inspector">Sub Inspector</option>
+                    </select>
+
+                    <label for="pno">PNO No:</label>
+                    <input type="text" id="pno" name="pno" required pattern="^\d{1,14}$" title="number must be between 9 to 14 digits">
+
+                    <label for="mobile">Mobile No:</label>
+                    <input type="text" id="mobile" name="mobile" required pattern="^\d{10}$" title="Mobile number must be exactly 10 digits">
+
+                    <label for="thana">Thana:</label>
+                    <input type="text" id="thana" name="thana" required pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
+
+                    <label for="chowki">Chowki:</label>
+                    <input type="text" id="chowki" name="chowki" required pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
+
+                    <label for="incident_place">Incident Place:</label>
+                    <input type="text" id="incident_place" name="incident_place" required>
+
+                    <label for="incident_datetime">Incident Date & Time:</label>
+                    <input type="datetime-local" id="incident_datetime" name="incident_datetime" required>
+
+                    <label for="incident_description">Incident Description:</label>
+                    <textarea id="incident_description" name="incident_description" rows="4" required></textarea>
+
+                    <label for="is_case_with_women">Is case with women?</label>
+                    <select id="is_case_with_women" name="is_case_with_women" required>
+                        <option value="yes">YES</option>
+                        <option value="no">NO</option>
+                    </select>
+
+                    <button type="submit">Submit Report</button>
+                </div>
+
+                <!-- Conditional form for non-police (Form 1) -->
+                <div id="non-police-form" class="conditional-section">
+                    <h3> Form 1: Incident Report </h3>
+                    <label for="username">Full Name:</label>
+                    <input type="text" id="username" name="username" required pattern="[A-Za-z\s]+" title="Only letters and spaces are allowed">
+
+                    <label for="mobile_no">Mobile No:</label>
+                    <input type="text" id="mobile_no" name="mobile_no" required pattern="^\d{10}$" title="Mobile number must be exactly 10 digits" >
+
+                    <label for="address">Address:</label>
+                    <input type="text" id="address" name="address" required>
+
+                    <label for="incident_place_no">Incident Place:</label>
+                    <input type="text" id="incident_place_no" name="incident_place_no" required>
+
+                    <label for="incident_datetime_no">Incident Date & Time:</label>
+                    <input type="datetime-local" id="incident_datetime_no" name="incident_datetime_no" required>
+
+                    <label for="incident_description_no">Incident Description:</label>
+                    <textarea id="incident_description_no" name="incident_description_no" rows="4" required></textarea>
+
+                    <label for="is_case_with_women_no">Is case with women?</label>
+                    <select id="is_case_with_women_no" name="is_case_with_women_no" required>
+                        <option value="yes">YES</option>
+                        <option value="no">NO</option>
+                    </select>
+
+                    <label for="id_select">Select ID:</label>
+                    <select id="id_select" name="id_select" required>
+                        <option value="aadhaar">Aadhaar</option>
+                    </select>
+
+                    <label for="aadhaar_no">ID No:</label>
+                    <input type="text" id="aadhaar_no" name="aadhaar_no" required>
+                    <label for="aadhaar_file">Attach ID (JPEG / PDF, less than 10MB):</label>
+                    <input type="file" id="aadhaar_file" name="aadhaar_file" accept=".jpeg,.pdf,.jpg" required>
+                    <div class="declaration-container">
+                    <input type="checkbox" id="declaration" required>
+                    <label for="declaration">I have declared to store my ID as proof of my identity.</label>
+                </div>
+                    <p><strong>Note:</strong> Recording show is paid for 30 minutes. Please pay.</p>
+
+                    <button type="submit">Submit </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Function to show the form with zoom-in effect when "Register" is clicked
+        function showForm() {
+            document.querySelector('.container').classList.add('shifted');
+            
+            // Add the 'active' class to the form container to trigger the zoom-in effect
+            setTimeout(() => {
+                document.getElementById('form-container').classList.add('active');
+                document.getElementById('form-container').scrollIntoView({ behavior: "smooth" });
+            }, 50); // Short delay to allow shifting effect before zooming
+        }
+
+        // Reset the container to its original position after reload
+        window.onload = () => {
+            document.querySelector('.container').classList.remove('shifted'); // Ensure it's slightly down
+            document.getElementById('form-container').classList.remove('active'); // Hide form initially
+        }
+
+        // Function to display police or non-police forms based on selection
+        function toggleFormSections() {
+            var policeSelect = document.getElementById('is_police');
+            var policeForm = document.getElementById('police-form');
+            var nonPoliceForm = document.getElementById('non-police-form');
+            
+            if (policeSelect.value === 'yes') {
+                policeForm.style.display = 'block';
+                nonPoliceForm.style.display = 'none';
+            } else if (policeSelect.value === 'no') {
+                nonPoliceForm.style.display = 'block';
+                policeForm.style.display = 'none';
+            } else {
+                policeForm.style.display = 'none';
+                nonPoliceForm.style.display = 'none';
+            }
+        }
+
+        // Placeholder function for Login (can be customized later)
+        function loginFunction() {
+            alert("Login functionality will be added later.");
+        }
+        
+    </script>
+
+</body>
+</html>
